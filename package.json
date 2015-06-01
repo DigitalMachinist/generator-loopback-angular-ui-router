@@ -1,6 +1,6 @@
 {
   "name": "generator-loopback-angular-ui-router",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Yeoman Generator for loopback-angular-ui-router",
   "author": [
     {
