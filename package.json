@@ -18,7 +18,8 @@
   "dependencies": {
     "chalk": "~0.5.1",
     "loopback-angular-ui-router": "latest",
-    "yeoman-generator": "~0.18.10"
+    "yeoman-generator": "~0.18.10",
+    "yosay": "^1.0.4"
   },
   "devDependencies": {
     "mocha": "~2.0.1"

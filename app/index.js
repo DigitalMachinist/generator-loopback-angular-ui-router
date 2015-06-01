@@ -1,48 +1,97 @@
-var fs     = require( 'fs' );
+'use strict';
+
 var path   = require( 'path' );
-var chalk  = require( 'chalk' );
 var util   = require( 'util' );
 var yeoman = require( 'yeoman-generator' );
+var yosay  = require( 'yosay' );
 
-module.exports = yeoman.generators.Base.extend( {
+var CustomGenerator = module.exports = function CustomGenerator( args, options, config ) {
 
-  constructor: function () {
-    yeoman.generators.Base.apply( this, arguments );
+  yeoman.generators.Base.apply( this, arguments );
+  this.pkg = JSON.parse( this.readFileAsString( path.join( __dirname, '../package.json' ) ) );
 
-  },
+};
 
-  install: function () {
-  	
-    var prompts = [];
+util.inherits( CustomGenerator, yeoman.generators.Base );
 
-    this.name = 'loopback-angular-ui-router';
+CustomGenerator.prototype.prompting = function prompting () {
 
-    this.files = this.expandFiles( '**/*', {
-      cwd: this.sourceRoot( path.resolve( __dirname, '../node_modules/loopback-angular-ui-router' ) ),
-      dot: true
-    } );
+  // Let Yeoman welcome the user.
+  console.log( yosay() );
 
-    var ignores = [
-		  '.git',
-		  'README.html',
-      'node_modules'
-		];
+  var prompts = [
+    {
+      name: 'projectName',
+      message: 'What would you like to call your project?'
+    }
+  ];
 
-    this.files.forEach( 
-    	function ( file ) {
-	      if ( ignores.indexOf( file ) !== -1 ) {
-	        return;
-	      }
-	      this.copy( file, file );
-    	}, 
-    	this 
+  var callback = this.async();
+  this.prompt( prompts, function ( answers ) {
+
+    this.projectName = answers.projectName;
+    callback();
+
+  }.bind( this ) );
+
+};
+
+CustomGenerator.prototype.install = function install () {
+
+  var sourcePath = this.sourceRoot( path.resolve( __dirname, '../node_modules/loopback-angular-ui-router' ) );
+  
+  // Copy whole directories.
+  this.directory( path.join( sourcePath, 'app' ),     path.join( this.projectName, 'app' )    );
+  this.directory( path.join( sourcePath, 'server' ),  path.join( this.projectName, 'server' ) );
+  this.directory( path.join( sourcePath, 'test' ),    path.join( this.projectName, 'test' )   );
+
+  // List out the files to copy.
+  var files = [
+    '.bowerrc',
+    '.editorconfig',
+    '.gitattributes',
+    '.jshintignore',
+    '.jshintrc',
+    '.travis.yml',
+    '.yo-rc.json',
+    'bower.json',
+    'Gruntfile.js',
+    'karma.conf.js',
+    'karma-e2e.conf.js',
+    'package.json'
+  ];
+
+  // Copy all of the files to the destination.
+  var self = this;
+  files.forEach( function ( filePath ) {
+    self.copy( 
+      path.join( sourcePath, filePath ), 
+      path.join( self.projectName, filePath )
     );
+  } );
 
-    this.config.save();
+  // Copy the .gitignore since it's named weirdly to prevent npm from removing it.
+  self.copy( 
+    path.join( sourcePath, '_.gitignore' ), 
+    path.join( self.projectName, '.gitignore' )
+  );
 
-    this.package = JSON.parse( this.readFileAsString( path.resolve( __dirname, '../package.json' ) ) );
+};
 
-    this.log.writeln( 'Generating from ' + chalk.cyan( 'loopback-angular-ui-router' ) + ' v' + chalk.cyan( this.package.version ) + '...' );
-  }
+CustomGenerator.prototype.end = function end () {
 
-} );
+  // Change into the generated folder.
+  process.chdir( path.join( process.cwd(), this.projectName ) );
+  console.log( '\n\nChanging directory to ./' + this.projectName + ' so you\'ll be ready to go when I\mm finished.' );
+
+  // Install dependencies with npm/bower.
+  this.installDependencies( {
+    bower: true,
+    npm: true,
+    skipInstall: false,
+    callback: function () {
+      console.log( 'Everything is ready to go! Enjoy.\n' );
+    }
+  } );
+
+};
