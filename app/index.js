@@ -82,15 +82,15 @@ CustomGenerator.prototype.end = function end () {
 
   // Change into the generated folder.
   process.chdir( path.join( process.cwd(), this.projectName ) );
-  console.log( '\n\nChanging directory to ./' + this.projectName + ' so you\'ll be ready to go when I\mm finished.' );
 
   // Install dependencies with npm/bower.
-  this.installDependencies( {
+  var self = this;
+  self.installDependencies( {
     bower: true,
     npm: true,
     skipInstall: false,
     callback: function () {
-      console.log( 'Everything is ready to go! Enjoy.\n' );
+      self.spawnCommand( 'grunt', [ 'build', '--base ./' + self.projectName ] );
     }
   } );
 
