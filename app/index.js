@@ -24,7 +24,8 @@ module.exports = yeoman.generators.Base.extend( {
 
     var ignores = [
 		  '.git',
-		  'README.html'
+		  'README.html',
+      'node_modules'
 		];
 
     this.files.forEach( 
