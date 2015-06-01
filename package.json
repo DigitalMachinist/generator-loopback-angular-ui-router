@@ -2,30 +2,19 @@
   "name": "generator-loopback-angular-ui-router",
   "version": "1.0.1",
   "description": "Yeoman Generator for loopback-angular-ui-router",
-  "main": "app/index.js",
+  "author": [
+    {
+      "name": "Jeff Rose",
+      "email": "jrose0@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jquery-boilerplate/generator-loopback-angular-ui-router.git"
+    "url": "git://github.com/DigitalMachinist/generator-loopback-angular-ui-router.git"
   },
-  "keywords": [
-    "yeoman-generator",
-    "loopback-angular-ui-router",
-    "yeoman"
-  ],
-  "engines": {
-    "node": ">= 0.10.0"
-  },
-  "author": {
-    "name": "Jeff Rose",
-    "email": "jrose0@gmail.com"
-  },
+  "main": "app/index.js",
   "license": "MIT",
-  "scripts": {
-    "test": "mocha --reporter spec"
-  },
-  "peerDependencies": {
-    "yo": ">=1.0.0-rc.1.1"
-  },
+  "private": false,
   "dependencies": {
     "chalk": "~0.5.1",
     "loopback-angular-ui-router": "latest",
@@ -33,5 +22,19 @@
   },
   "devDependencies": {
     "mocha": "~2.0.1"
-  }
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0-rc.1.1"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "loopback-angular-ui-router",
+    "yeoman"
+  ]
 }
